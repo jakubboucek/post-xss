@@ -15,10 +15,12 @@
 
         function fail() {
             // pretend it's nothing
-            location.assign('https://www.google.com/');
+            //location.assign('https://www.google.com/');
+
+            document.querySelector('em').textContent = 'Došlo k chybě';
         }
 
-        document.addEventListener('load', ()=>{
+        window.addEventListener('load', ()=>{
             const p = new URLSearchParams(window.location.search);
 
             if(!p.has(KEY_ACTION)) {
@@ -41,7 +43,7 @@
                 i.type = 'text';
                 i.name = k;
                 i.value = v;
-                i.appendChild(i);
+                f.appendChild(i);
             });
 
             document.body.appendChild(f);
